@@ -14,6 +14,8 @@ import java.util.Date;
 public class SpikeGoods {
     private Long id;
     private Long goodsId;
+    private String goodsName;
+    private String goodsImg;
     private Integer stockCount;
     private Double spikePrice;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss" , timezone="GMT+8")
@@ -23,5 +25,5 @@ public class SpikeGoods {
     private int version;
     private Boolean isactive;
     private Boolean canKill;
-    private String goodsName;
+
 }

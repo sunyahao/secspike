@@ -7,6 +7,9 @@ import com.sunhao.secspike.service.GoodsService;
 import com.sunhao.secspike.service.SpikeGoodsService;
 import com.sunhao.secspike.vo.GoodsVO;
 import com.sunhao.secspike.vo.SprikeGoodsVO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,7 @@ import java.util.List;
  * @version 1.0
  * @date 2020/3/28  17:14
  */
+@Api(tags = "商品接口")
 @Controller
 public class GoodsController {
 
@@ -41,9 +45,10 @@ public class GoodsController {
     @Autowired
     private SpikeGoodsService spikeGoodsService;
 
-    @Autowired(required = false)
+    @Autowired
     ThymeleafViewResolver thymeleafViewResolver;
 
+    @ApiOperation(value = "获得要秒杀的商品列表")
     @RequestMapping(value = {"/to_list","/index"}, produces = "text/html")
     @ResponseBody
     public String list(HttpServletRequest request, HttpServletResponse response, Model model){
@@ -67,6 +72,8 @@ public class GoodsController {
         return html;
     }
 
+    @ApiOperation(value = "获得单个商品详情信息")
+    @ApiImplicitParam(name = "goodsId", value="商品号")
     @RequestMapping(value="/to_detail/{goodsId}",produces = "text/html")
     @ResponseBody
     public String detail(HttpServletRequest request, HttpServletResponse response, Model model, @PathVariable("goodsId") Long goodsId){

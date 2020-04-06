@@ -14,10 +14,13 @@ public class Result<T> {
     /**
      *  成功时候的调用
      * */
-    public static  <T> Result<T> success(CodeMsg codeMsg){
+    public static <T> Result<T> success(CodeMsg codeMsg){
         return new Result<T>(codeMsg);
     }
 
+    public static  <T> Result<T> success(T data){
+        return new Result<T>(data);
+    }
     /**
      *  失败时候的调用
      * */

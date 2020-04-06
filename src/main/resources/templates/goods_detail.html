@@ -1,45 +1,120 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>商城高并发抢购-商品详情页面</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <!-- jquery -->
-    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
-    <!-- bootstrap -->
-    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap/css/bootstrap.min.css}"/>
-    <script type="text/javascript" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
-    <!-- jquery-validator -->
-    <script type="text/javascript" th:src="@{/jquery-validation/jquery.validate.min.js}"></script>
-    <script type="text/javascript" th:src="@{/jquery-validation/localization/messages_zh.min.js}"></script>
+  <title>商城高并发抢购-商品详情页面</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/swiper.min.css}"/>
+  <!--<link rel="stylesheet" type="text/css" th:href="@{/bootstrap/css/bootstrap.min.css}"/>-->
+  <link rel="stylesheet" type="text/css" th:href="@{/css/iconfont.css}"/>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}"/>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/index.css}"/>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/detail.css}">
+  <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+  <script type="text/javascript" th:src="@{/layer/layer.js}"></script>
+  <script type="text/javascript" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+  <script type="text/javascript" th:src="@{/js/common.js}"></script>
 </head>
 <body>
-<div class="container">
-    <div class="panel panel-default">
-        <input id="killId" th:value="${goods.goodsId}" type="hidden"/>
-        <div class="panel-heading">
-            <h1 th:text="'商品名称：'+${goods.goodsName}"></h1>
-        </div>
-        <div class="panel-body">
-            <h2 class="text-danger" th:text="'剩余数量：'+${goods.stockCount}"></h2>
-        </div>
-        <div class="panel-body">
-            <h2 class="text-danger" th:text="'价格：'+${goods.spikePrice}"></h2>
-        </div>
-        <div class="panel-body">
-            <h2 class="text-danger" th:text="'开始时间：'+${#dates.format(goods.startTime,'yyyy-MM-dd HH:mm:ss')}"></h2>
-        </div>
-        <div class="panel-body">
-            <h2 class="text-danger" th:text="'结束时间：'+${#dates.format(goods.endTime,'yyyy-MM-dd HH:mm:ss')}"></h2>
-        </div>
+<div id="detail">
+  <div class="jieshao mt20 w clearfix">
+    <div class="left fl" style="position: relative;">
+      <div class="hiddenbox">
+      </div>
+      <img th:src="@{/img/xiaomi6_small.jpg}">
+      <div class="smallbox"></div>
+      <div class="bigbox">
+        <img th:src="@{/img/xiaomi6_big.jpg}">
+      </div>
     </div>
-
-    <td th:if="${goods.canKill} eq true">
-        <a class="btn btn-info" style="font-size: 20px" onclick="">抢购</a>
-    </td>
-    <td th:if="${goods.canKill} ne true">
-        <a class="btn btn-info" style="font-size: 20px">哈哈~商品已抢购完毕或者不在抢购时间段哦!</a>
-    </td>
+    <div class="right fr">
+      <input id="killId" th:value="${goods.goodsId}" type="hidden"/>
+      <div class="h3 ml20 mt20" th:text="'商品名称：'+${goods.goodsName}"></div>
+      <div class="ft20 ml20 mt20" th:text="'剩余数量：'+${goods.stockCount}"></div>
+      <div class="jiage ml20 mt10" th:text="'价格：'+${goods.spikePrice}"></div>
+      <div class="ft20 ml20 mt20" th:text="'开始时间：'+${#dates.format(goods.startTime,'yyyy-MM-dd HH:mm:ss')}"></div>
+      <div class="ft20 ml20 mt20" th:text="'结束时间：'+${#dates.format(goods.endTime,'yyyy-MM-dd HH:mm:ss')}"></div>
+      <div class="xiadan ml20 mt20">
+        <input class="jrgwc" type="button" name="jrgwc" value="点击秒杀" onclick="doSpike()"/>
+      </div>
+    </div>
+    <div class="clear"></div>
+  </div>
 </div>
 
+<script th:src="@{/js/index.js}"></script>
+<script th:src="@{/js/swiper.min.js}"></script>
+<script>
+  new Swiper('.swiper-container', {
+    slidesPerView: 5,
+    centeredSlides: false,
+    spaceBetween: 30,
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+  });
+
+  function doSpike() {
+    $.ajax({
+      url: "/spike/do_spike",
+      type: "POST",
+      data: {
+        goodsId: $("#killId").val(),
+      },
+      success: function (data) {
+        console.log(data);
+        if (data.code == 500502) {
+          getResult($("#killId").val());
+        } else {
+            layer.msg(data.msg)
+          }
+
+      },
+      error: function () {
+        layer.msg("客户端请求错误");
+      }
+    });
+  }
+
+  function getResult(goodsId){
+    g_showLoading();
+    $.ajax({
+      url:"/spike/getResult",
+      type:"POST",
+      data:{
+        goodsId:$("#killId").val(),
+      },
+      success:function(data){
+        if(data.code == 0){
+          var res = data.data;
+          if(res == '-1'){
+            layer.msg("秒杀失败");
+          }else if(res == '0'){//继续轮询
+            setTimeout(function(){
+              getResult(goodsId);
+            }, 50);
+          }else{
+            layer.confirm("秒杀成功！查看订单？", {btn:["确定","取消"]},
+                    function(){
+                      window.location.href="/order/getMyOrder";
+                    },
+                    function(){
+                      layer.closeAll();
+                    });
+          }
+        }else{
+          layer.msg(data.msg);
+        }
+      },
+      error:function(){
+        layer.msg("客户端请求有误");
+      }
+    });
+  }
+</script>
 </body>
 </html>

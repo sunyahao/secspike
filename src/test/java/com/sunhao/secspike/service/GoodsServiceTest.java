@@ -1,6 +1,5 @@
 package com.sunhao.secspike.service;
 
-import com.sunhao.secspike.bean.SpikeGoods;
 import com.sunhao.secspike.vo.GoodsVO;
 import org.junit.Test;
 import org.junit.runner.RunWith;

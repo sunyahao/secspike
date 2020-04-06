@@ -12,6 +12,7 @@ import lombok.Setter;
 public class Goods {
     private Long id;
     private String goodsName;
+    private String goodsImg;
     private String code;
     private Double goodsPrice;
     private Integer goodsStock;

@@ -50,9 +50,8 @@ public class ShiroConfig {
         //设置拦截器
         Map<String,String> filterChainDefinitionMap = new LinkedHashMap<>();
         //开放匿名权限
-        filterChainDefinitionMap.put("/to_list","anon");
-        filterChainDefinitionMap.put("/index","anon");
         filterChainDefinitionMap.put("/do_login","anon");
+        filterChainDefinitionMap.put("/do_spike1","anon");
         //其余接口一律拦截
         //这一行代码必须放到最后，不然会导致所有url被拦截
         filterChainDefinitionMap.put("/**","authc");

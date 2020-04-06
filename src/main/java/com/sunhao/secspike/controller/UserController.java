@@ -5,6 +5,10 @@ import com.sunhao.secspike.api.Result;
 import com.sunhao.secspike.bean.User;
 import com.sunhao.secspike.redis.RedisService;
 import com.sunhao.secspike.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -15,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
@@ -24,6 +29,7 @@ import javax.servlet.http.HttpSession;
  * @version 1.0
  * @date 2020/3/29  17:06
  */
+@Api(tags = "用户模块接口")
 @Controller
 public class UserController {
 
@@ -33,11 +39,14 @@ public class UserController {
     @Autowired
     private RedisService redisService;
 
+    @ApiOperation(value = "跳转到登陆界面")
     @RequestMapping("/to_login")
     public String toLogin(){
         return "login";
     }
 
+    @ApiOperation(value = "用户登录接口", notes="用户通过账号密码登录")
+    @ApiImplicitParams({@ApiImplicitParam(name = "username", value = "用户名", required = true),@ApiImplicitParam(name = "password", value="密码", required = true)})
     @RequestMapping("/do_login")
     public <T> String doLogin(@RequestParam("username") String username, @RequestParam("password") String password, HttpSession session, Model model){
         Result<T> res = null;
@@ -66,5 +75,13 @@ public class UserController {
             model.addAttribute("result",res);
             return "login";
         }
+    }
+
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logout(HttpSession session){
+        session.removeAttribute("user");
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        return "login";
     }
 }

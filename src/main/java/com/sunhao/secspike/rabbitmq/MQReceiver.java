@@ -1,19 +1,22 @@
 package com.sunhao.secspike.rabbitmq;
 
-import com.sunhao.secspike.bean.Order;
+import com.sunhao.secspike.bean.OrderInfo;
 import com.sunhao.secspike.redis.RedisService;
 import com.sunhao.secspike.service.GoodsService;
 import com.sunhao.secspike.service.OrderService;
+import com.sunhao.secspike.service.SpikeGoodsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * @author SunYaHao
  * @version 1.0
  * @date 2020/3/29  21:24
  */
+@Service
 public class MQReceiver {
 
     private final static Logger log = LoggerFactory.getLogger(MQReceiver.class);
@@ -27,8 +30,12 @@ public class MQReceiver {
     @Autowired
     private OrderService orderService;
 
-    @RabbitListener(queues = MQConfig.QUEUE)
+    @Autowired
+    private SpikeGoodsService spikeGoodsService;
+
+    @RabbitListener(queues = MQConfig.LOG_USER_QUEUE_NAME)
     public void receive(String message){
+        System.out.println(1);
         OrderMessage msg = RedisService.stringToBean(message,OrderMessage.class);
         long userId = msg.getUserId();
         long goodsId = msg.getGoodsId();
@@ -42,12 +49,11 @@ public class MQReceiver {
 
 //        因为消息队列有延迟性，所以可能存在用户多次购买的现象，比如消息队列中有一条未被处理到的a的购买记录，而客户端的a再次购买了该商品，那么就会
 //        进入到该队列中来
-        Order order = orderService.getOrder(userId,goodsId);
-        if(order != null){
+        OrderInfo orderInfo = orderService.getOrder(userId,goodsId);
+        if(orderInfo != null){
             log.info("用户"+userId+"已经购买过商品号为"+goodsId+"的商品");
             return ;
         }
-
-
+        spikeGoodsService.secSpike(userId, goodsId);
     }
 }

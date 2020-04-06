@@ -1,5 +1,6 @@
 package com.sunhao.secspike.service;
 
+import com.sunhao.secspike.bean.OrderInfo;
 import com.sunhao.secspike.vo.SprikeGoodsVO;
 
 /**
@@ -16,5 +17,7 @@ public interface SpikeGoodsService {
      */
     SprikeGoodsVO getGoodsDetail(long goodsId);
 
+    OrderInfo secSpike(long userId, long goodsId);
 
+    String getSpikeResult(long userId, long goodsId);
 }

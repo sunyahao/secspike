@@ -1,5 +1,6 @@
 package com.sunhao.secspike.service.impl;
 
+import com.sunhao.secspike.bean.OrderInfo;
 import com.sunhao.secspike.mapper.SpikeGoodsMapper;
 import com.sunhao.secspike.service.GoodsService;
 import com.sunhao.secspike.service.OrderService;
@@ -44,6 +45,37 @@ public class SpikeGoodsServiceImpl implements SpikeGoodsService {
         return spikeGoodsMapper.getGoodsDetail(goodsId);
     }
 
+    /**
+     * 进行减库存，下订单，创建订单操作
+     * @return
+     */
     @Transactional
-    public
+    public OrderInfo secSpike(long userId, long goodsId){
+        //减库存
+        boolean isReduce = goodsService.reduceStockByVersion(goodsId);
+        if(isReduce){
+            OrderInfo orderInfo = orderService.createOrder(userId,goodsId);
+            return orderInfo;
+        }
+        return null;
+    }
+
+    /**
+     * 获取秒杀结果，秒杀成功返回订单号，排队中返回0，秒杀失败返回-1
+     * @param userId
+     * @param goodsId
+     * @return
+     */
+    @Override
+    public String getSpikeResult(long userId, long goodsId) {
+        OrderInfo order = orderService.getOrder(userId, goodsId);
+        if(order != null){
+            return order.getOrderId();
+        }
+        int stockCount = goodsService.getStockCount(goodsId);
+        if(stockCount > 0){
+            return "0";
+        }
+        return "-1";
+    }
 }

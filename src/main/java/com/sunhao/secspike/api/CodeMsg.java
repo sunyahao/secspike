@@ -14,7 +14,7 @@ public class CodeMsg {
     private int code;
     private String msg;
 
-    private CodeMsg(int code,String Msg){
+    private CodeMsg(int code,String msg){
         this.code = code;
         this.msg = msg;
     }

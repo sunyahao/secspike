@@ -1,6 +1,8 @@
 package com.sunhao.secspike.service;
 
-import com.sunhao.secspike.bean.Order;
+import com.sunhao.secspike.bean.OrderInfo;
+
+import java.util.List;
 
 /**
  * @author SunYaHao
@@ -15,5 +17,9 @@ public interface OrderService {
      * @param goodsId
      * @return
      */
-    Order getOrder(long userId, long goodsId);
+    OrderInfo getOrder(long userId, long goodsId);
+
+    OrderInfo createOrder(long userId, long goodsId);
+
+    List<OrderInfo> getAllOrder(long userId);
 }

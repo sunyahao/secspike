@@ -16,6 +16,7 @@ import java.util.Date;
 public class GoodsVO {
     private Long goodsId;
     private String goodsName;
+    private String goodsImg;
     private Integer stockCount;
     private Boolean canKill;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss" , timezone="GMT+8")
