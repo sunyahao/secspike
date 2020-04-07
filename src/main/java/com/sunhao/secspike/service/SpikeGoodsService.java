@@ -20,4 +20,8 @@ public interface SpikeGoodsService {
     OrderInfo secSpike(long userId, long goodsId);
 
     String getSpikeResult(long userId, long goodsId);
+
+    public String createPath(long goodsId);
+
+    public Boolean checkPath(long goodsId, String path);
 }

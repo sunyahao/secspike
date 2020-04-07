@@ -2,9 +2,13 @@ package com.sunhao.secspike.service.impl;
 
 import com.sunhao.secspike.bean.OrderInfo;
 import com.sunhao.secspike.mapper.SpikeGoodsMapper;
+import com.sunhao.secspike.redis.GoodsKey;
+import com.sunhao.secspike.redis.RedisService;
 import com.sunhao.secspike.service.GoodsService;
 import com.sunhao.secspike.service.OrderService;
 import com.sunhao.secspike.service.SpikeGoodsService;
+import com.sunhao.secspike.util.MD5Util;
+import com.sunhao.secspike.util.SnowflakeIdWorker;
 import com.sunhao.secspike.vo.SprikeGoodsVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +34,9 @@ public class SpikeGoodsServiceImpl implements SpikeGoodsService {
 
     @Autowired
     private GoodsService goodsService;
+
+    @Autowired
+    private RedisService redisService;
 
     /**
      * 获得商品的详细信息
@@ -77,5 +84,34 @@ public class SpikeGoodsServiceImpl implements SpikeGoodsService {
             return "0";
         }
         return "-1";
+    }
+
+    /**
+     * 生成商品的动态地址
+     * @param goodsId
+     * @return
+     */
+    public String createPath(long goodsId){
+        SnowflakeIdWorker idWorker = new SnowflakeIdWorker(2);
+        String path = MD5Util.md5(String.valueOf(idWorker.nextId()));
+        redisService.set(GoodsKey.getGoodsUrl,""+goodsId,path);
+        return path;
+    }
+
+    /**
+     * 判断url地址是否与缓存中的相同
+     * @param goodsId
+     * @param path
+     * @return
+     */
+    public Boolean checkPath(long goodsId, String path){
+        if(path == null){
+            return false;
+        }
+        String path1 = redisService.get(GoodsKey.getGoodsUrl,""+goodsId,String.class);
+        if(path1.equals(path)){
+            return true;
+        }
+        return false;
     }
 }

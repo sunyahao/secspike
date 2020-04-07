@@ -34,7 +34,7 @@
       <div class="ft20 ml20 mt20" th:text="'开始时间：'+${#dates.format(goods.startTime,'yyyy-MM-dd HH:mm:ss')}"></div>
       <div class="ft20 ml20 mt20" th:text="'结束时间：'+${#dates.format(goods.endTime,'yyyy-MM-dd HH:mm:ss')}"></div>
       <div class="xiadan ml20 mt20">
-        <input class="jrgwc" type="button" name="jrgwc" value="点击秒杀" onclick="doSpike()"/>
+        <input class="jrgwc" type="button" name="jrgwc" value="点击秒杀" onclick="getPath()"/>
       </div>
     </div>
     <div class="clear"></div>
@@ -58,12 +58,35 @@
     },
   });
 
-  function doSpike() {
+  function getPath(){
     $.ajax({
-      url: "/spike/do_spike",
-      type: "POST",
+      url: "/spike/getPath",
+      type: "GET",
       data: {
         goodsId: $("#killId").val(),
+      },
+      success: function (data) {
+        if (data.code == 0) {
+          doSpike(data.data);
+        } else {
+          layer.msg(data.msg)
+        }
+
+      },
+      error: function () {
+        layer.msg("客户端请求错误");
+      }
+    });
+  }
+
+  function doSpike(path) {
+    console.log(path)
+    $.ajax({
+      url: "/spike/do_spike",
+      type: "GET",
+      data: {
+        goodsId: $("#killId").val(),
+        path: path,
       },
       success: function (data) {
         console.log(data);

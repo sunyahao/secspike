@@ -59,12 +59,15 @@ public class SpikeController {
 
     @ApiOperation(value = "用户点击秒杀")
     @ApiImplicitParam(name = "goodsId", value="商品号")
-    @PostMapping("/do_spike")
+    @GetMapping("/do_spike")
     @ResponseBody
-    public Result<Integer> doSpike(Model model, HttpSession session, @RequestParam("goodsId") long goodsId){
-        User user = (User) session.getAttribute("user");
-        if(user == null) return Result.error(CodeMsg.SESSION_ERROR);
+    public Result<Integer> doSpike(Model model, HttpSession session, @RequestParam("goodsId") long goodsId, @RequestParam("path") String path){
+        boolean flag = spikeGoodsService.checkPath(goodsId,path);
+        if(!flag){
+            return Result.error(CodeMsg.REPEATE_SECKILL);
+        }
         //获取该商品的内存标记，true表示已经秒杀完毕
+        User user = (User) session.getAttribute("user");
         if(!localOverMap.containsKey(goodsId)){
             initialInfo();
         }
@@ -196,5 +199,22 @@ public class SpikeController {
         User user = (User) session.getAttribute("user");
         String orderId = spikeGoodsService.getSpikeResult(Long.valueOf(user.getUsername()), goodsId);
         return Result.success(orderId);
+    }
+
+    /**
+     * 获取动态地址
+     * @param goodsId
+     * @return
+     */
+    @GetMapping(value = "/getPath")
+    @ResponseBody
+    public Result<String> getPath(long goodsId){
+        String path = null;
+        if(redisService.exists(GoodsKey.getGoodsUrl,""+goodsId)){
+            path =  redisService.get(GoodsKey.getGoodsUrl,""+goodsId, String.class);
+            return Result.success(path);
+        }
+        path = spikeGoodsService.createPath(goodsId);
+        return Result.success(path);
     }
 }
