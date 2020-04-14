@@ -9,7 +9,7 @@ Jmeter
 ## 对流程图中各步骤进行优化
 |ProcessID   |Problem   |Solution   |
 | :------------ | :------------ | :------------ |
-|P1&P2   |秒杀开始时系统承受极大的流量直接宕掉   |[页面级缓存thymeleafViewResolver](http://github "页面级缓存thymeleafViewResolver")   |
+|P1&P2   |秒杀时用户频繁刷新页面，系统会承受极大的流量直接宕掉   |[页面级缓存thymeleafResolver](https://github.com/sunyahao/secspike/tree/master/docs/pageSolver.md "页面级缓存thymeleafResolver")   |
 |P3&P4   |高峰期直接从数据库获取信息会让数据库直接挂掉   |[本地标记+redis预处理](http://1 "redis对象缓存")   |
 |P5   |高峰期直接扣减库存往往会产生卖超问题   |[消息队列(请求入队列缓冲，异步下单，减少数据库压力)，客户端轮询](http://1 "消息队列")   |
 |p5   |高并发写入数据库时会产生一致性问题   |[乐观锁(版本号机制)](http://1 "乐观锁(版本号机制)")   |
