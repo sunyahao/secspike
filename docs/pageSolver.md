@@ -7,7 +7,7 @@
 thymeleafViewResolver+Redis
 ### 四、代码实操
 ````java
-		String html = redisService.get(GoodsKey.getGoodsList, "", String.class);//从缓存中获取html源代码
+        String html = redisService.get(GoodsKey.getGoodsList, "", String.class);//从缓存中获取html源代码
         if (!StringUtils.isEmpty(html)) {
             return html;
         }//如果html源代码成功从缓存中取到那就直接返回
