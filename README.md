@@ -1,7 +1,7 @@
 ## 这个系统做了什么
 该系统实现了基本的登录功能、查看商品列表、查看商品详情、秒杀、下单、查看我的订单、注销等基本功能，完成了一个基本的秒杀业务。
 ## 项目演示
-项目演示地址：[http://xukongzhikun.cn](http://xukongzhikun.cn "http://xukongzhikun.cn")
+项目演示地址：[http://xukongzhikun.cn](http://xukongzhikun.cn:8080 "http://xukongzhikun.cn:8080")
 ## 开发工具
 IntelliJ IDEA + Git + Navicat for Mysql + Chrome
 ## 压测工具
