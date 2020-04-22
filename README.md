@@ -10,11 +10,11 @@ Jmeter
 |ProcessID   |Problem   |Solution   |
 | :------------ | :------------ | :------------ |
 |P1&P2   |秒杀时用户频繁刷新页面，系统会承受极大的流量直接宕掉   |[页面级缓存thymeleafResolver](https://github.com/sunyahao/secspike/tree/master/docs/pageSolver.md "页面级缓存thymeleafResolver")   |
-|P3&P4   |高峰期直接从数据库获取信息会让数据库直接挂掉   |[本地标记+redis预处理](http://1 "redis对象缓存")   |
-|P5   |高峰期直接扣减库存往往会产生卖超问题   |[消息队列(请求入队列缓冲，异步下单，减少数据库压力)，客户端轮询](http://1 "消息队列")   |
-|p5   |高并发写入数据库时会产生一致性问题   |[乐观锁(版本号机制)](http://1 "乐观锁(版本号机制)")   |
-|P6   |高峰期订单ID可能会产生冲突   |[雪花算法](http://1 "雪花算法")   |
+|P3&P4   |高峰期直接从数据库获取信息会让数据库直接挂掉   |[本地标记+redis预处理](https://github.com/sunyahao/secspike/tree/master/docs/preSolver.md "本地标记+redis预处理")|
+|P5   |高峰期直接扣减库存往往会产生卖超问题   |[消息队列(请求入队列缓冲，异步下单，减少数据库压力)，客户端轮询](https://github.com/sunyahao/secspike/tree/master/docs/messageQueue.md "消息队列(请求入队列缓冲，异步下单，减少数据库压力)，客户端轮询")   |
+|p5   |高并发写入数据库时会产生一致性问题   |[乐观锁(版本号机制)](https://github.com/sunyahao/secspike/tree/master/docs/optimisticLock.md "乐观锁(版本号机制)")   |
+|P6   |高峰期订单ID可能会产生冲突   |[雪花算法](https://github.com/sunyahao/secspike/tree/master/docs/SnowFlake.md "雪花算法")   |
 ## 其他方面的一些优化
 |ID   |Problem   |Solution   |
 | :------------ | :------------ | :------------ |
-|01   |用户直接通过url去访问秒杀接口   |[动态生成url隐藏秒杀接口](http://1 "动态生成url隐藏秒杀接口")   |
+|01   |用户直接通过url去访问秒杀接口   |[动态生成url隐藏秒杀接口](https://github.com/sunyahao/secspike/tree/master/docs/url.md "动态生成url隐藏秒杀接口")   |
