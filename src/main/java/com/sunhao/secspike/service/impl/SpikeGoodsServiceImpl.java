@@ -38,6 +38,7 @@ public class SpikeGoodsServiceImpl implements SpikeGoodsService {
     @Autowired
     private RedisService redisService;
 
+
     /**
      * 获得商品的详细信息
      * @param goodsId

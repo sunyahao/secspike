@@ -3,7 +3,7 @@ package com.sunhao.secspike.rabbitmq;
 import com.sunhao.secspike.redis.RedisService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,15 +15,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class MQSender {
 
-    private static Logger log = LoggerFactory.getLogger(MQSender.class);
+    private static Logger logger = LoggerFactory.getLogger(MQSender.class);
 
     @Autowired
-    AmqpTemplate amqpTemplate;
+    RabbitTemplate rabbitTemplate;
 
     public void sendOrderMessage(String exchange, String routingKey, OrderMessage message){
         String msg = RedisService.beanToString(message);
-        log.info("send message:"+msg);
-        amqpTemplate.convertAndSend(exchange,routingKey,msg);
-        System.out.println(2);
+        logger.info("send message:"+msg);
+        rabbitTemplate.convertAndSend(exchange,routingKey,msg);
+    }
+
+    public void sendOrderMessageToDelayQueue(String exchange, String routingKey, OrderMessage message){
+        String msg = RedisService.beanToString(message);
+        logger.info("send message To delay Queue:"+msg);
+        rabbitTemplate.convertAndSend(exchange,routingKey,msg);
     }
 }

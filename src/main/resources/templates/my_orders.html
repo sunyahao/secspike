@@ -20,7 +20,7 @@
       <li></li>
       <li></li>
       <li></li>
-      <li></li>
+      <li><a href="/order/getMyOrder">我的订单</a></li>
     </ul>
     <div class="fr">
       <div class="user">
@@ -79,22 +79,26 @@
         </ul>
       </div>
     </div>
-    <div class="rtcont fr">
+    <div class="rtcont fr" style="overflow-y:auto;overflow-x:hidden">
       <div class="ddzxbt">交易订单</div>
-      <div class="ddxq" th:each="order,orderStat: ${orderList}">
-        <div class="ddspt fl"><img th:src="@{/img/gwc_xiaomi6.jpg}" alt=""></div>
-        <div class="ddbh fl" th:text="'订单号'+${order.orderId}"></div>
-        <div class="ztxx fr">
-          <ul>
-            <li th:text="${order.goodsName}"></li>
-            <li>未发货</li>
-            <li th:text="${order.price}"></li>
-            <li th:text="${#dates.format(order.createTime,'yyyy/MM/dd HH:mm:ss')}"></li>
-            <div class="clear"></div>
-          </ul>
+
+        <div class="ddxq" th:each="order,orderStat: ${orderList}">
+          <div class="ddspt fl"><img th:src="@{/img/gwc_xiaomi6.jpg}" alt=""></div>
+          <div class="ddbh fl" th:text="'订单号'+${order.orderId}"></div>
+          <div class="ztxx fr">
+            <ul>
+              <li th:text="${order.goodsName}" style="font-size:12px;line-height:20px"></li>
+              <li th:if="${order.status} eq 0">未付款</li>
+              <li th:if="${order.status} eq 1">已付款</li>
+              <li th:if="${order.status} eq 2">已取消</li>
+              <li th:text="${order.price}"></li>
+              <li th:text="${#dates.format(order.createTime,'yyyy/MM/dd HH:mm:ss')}" style="line-height:30px"></li>
+              <div class="clear"></div>
+            </ul>
+          </div>
+          <div class="clear"></div>
         </div>
-        <div class="clear"></div>
-      </div>
+
     </div>
     <div class="clear"></div>
   </div>

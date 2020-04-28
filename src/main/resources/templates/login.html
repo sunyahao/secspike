@@ -1,45 +1,113 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>登录页</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <!-- jquery -->
-    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
-    <!-- bootstrap -->
-    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap/css/bootstrap.min.css}"/>
-    <script type="text/javascript" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+	<title>Login V18</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->	
+	<link rel="icon" type="image/png" th:href="@{/login/images/icons/favicon.ico}"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" th:href="@{/login/vendor/bootstrap/css/bootstrap.min.css}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" th:href="@{/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" th:href="@{/login/fonts/Linearicons-Free-v1.0.0/icon-font.min.css}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" th:href="@{/login/vendor/animate/animate.css}">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" th:href="@{/login/vendor/css-hamburgers/hamburgers.min.css}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" th:href="@{/login/vendor/animsition/css/animsition.min.css}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" th:href="@{/login/vendor/select2/select2.min.css}">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" th:href="@{/login/vendor/daterangepicker/daterangepicker.css}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" th:href="@{/login/css/util.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/login/css/main.css}">
+<!--===============================================================================================-->
 </head>
-<body>
-<div class="container">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h1 align="center">这是用户登录页</h1>
+<body style="background-color: #666666;">
+	
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100">
+				<form class="login100-form validate-form" action="/do_login" method="post">
+					<span class="login100-form-title p-b-43">
+						Login to continue
+					</span>
+					
+					
+					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+						<input class="input100" type="text" name="username">
+						<span class="focus-input100"></span>
+						<span class="label-input100">Username</span>
+					</div>
+					
+					
+					<div class="wrap-input100 validate-input" data-validate="Password is required">
+						<input class="input100" type="password" name="password">
+						<span class="focus-input100"></span>
+						<span class="label-input100">Password</span>
+					</div>
 
-            <form action="/do_login" method="post">
-                <table align="center" border="0">
-                    <tr>
-                        <td>用户名:</td>
-                        <td><input type="text" name="username"></td>
-                    </tr>
-                    <br/>
-                    <tr>
-                        <td>密&nbsp;&nbsp;码:</td>
-                        <td><input type="password" name="password"></td>
-                    </tr>
-                    <tr>
-                        <td><input type="submit" value="登录" name="login"></td>
-                        <td><input type="reset" value="重置" name="reset"></td>
-                    </tr>
-                </table>
-            </form>
+					<div class="flex-sb-m w-full p-t-3 p-b-32">
+						<div class="contact100-form-checkbox">
+							<input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
+							<label class="label-checkbox100" for="ckb1">
+								Remember me
+							</label>
+						</div>
 
-            <h2 align="center" th:text="${result?.msg}"></h2>
-        </div>
-    </div>
-</div>
+						<div>
+							<a href="#" class="txt1">
+								Forgot Password?
+							</a>
+						</div>
+					</div>
+			
+
+					<div class="container-login100-form-btn">
+						<!-- <button class="login100-form-btn">
+							Login
+						</button> -->
+						<input type="submit" value="LOGIN" name="login" class="login100-form-btn">
+					</div>
+					<h2 align="center" th:text="${result?.msg}" style="margin-top:20px"></h2>
+				</form>
+				<div class="login100-more" style="background-image: url('/login/images/bg-01.jpg');">
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	
+	
+
+	
+	
+<!--===============================================================================================-->
+	<script th:src="@{/login/vendor/jquery/jquery-3.2.1.min.js}"></script>
+<!--===============================================================================================-->
+	<script th:src="@{/login/vendor/animsition/js/animsition.min.js}"></script>
+<!--===============================================================================================-->
+	<script th:src="@{/login/vendor/bootstrap/js/popper.js}"></script>
+	<script th:src="@{/login/vendor/bootstrap/js/bootstrap.min.js}"></script>
+<!--===============================================================================================-->
+	<script th:src="@{/login/vendor/select2/select2.min.js}"></script>
+<!--===============================================================================================-->
+	<script th:src="@{/login/vendor/daterangepicker/moment.min.js}"></script>
+	<script th:src="@{/login/vendor/daterangepicker/daterangepicker.js}"></script>
+<!--===============================================================================================-->
+	<script th:src="@{/login/vendor/countdowntime/countdowntime.js}"></script>
+	<script type="text/javascript" th:src="@{/layer/layer.js}"></script>
+<!--===============================================================================================-->
+	<script th:src="@{/login/js/main.js}"></script>
+	<script>
+		$(document).ready(function() {
+			layer.alert("用户名：1111\n密码：1111")
+		});
+	</script>
 </body>
-<script src="${ctx}/static/plugins/jquery.js"></script>
-<script src="${ctx}/static/plugins/bootstrap-3.3.0/js/bootstrap.min.js"></script>
-<script src="${ctx}/static/plugins/jquery.cookie.min.js"></script>
-<script src="${ctx}/static/plugins/jquery.countdown.min.js"></script>
 </html>

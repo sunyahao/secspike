@@ -1,7 +1,6 @@
 package com.sunhao.secspike.mapper;
 
 
-import com.sunhao.secspike.bean.Goods;
 import com.sunhao.secspike.bean.SpikeGoods;
 import com.sunhao.secspike.vo.GoodsVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -36,5 +35,5 @@ public interface GoodsMapper {
     public int getVersionByGoodsId(@Param("goodsId") long goodsId);
 
     @Select("select * from ss_goods_spike where goods_id = #{goodsId}")
-    public Goods getGoodsByGoodsId(long goodsId);
+    public SpikeGoods getGoodsByGoodsId(long goodsId);
 }

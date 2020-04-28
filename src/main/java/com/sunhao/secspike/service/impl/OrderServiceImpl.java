@@ -1,10 +1,13 @@
 package com.sunhao.secspike.service.impl;
 
-import com.sunhao.secspike.bean.Goods;
 import com.sunhao.secspike.bean.Order;
 import com.sunhao.secspike.bean.OrderInfo;
+import com.sunhao.secspike.bean.SpikeGoods;
 import com.sunhao.secspike.mapper.GoodsMapper;
 import com.sunhao.secspike.mapper.OrderMapper;
+import com.sunhao.secspike.rabbitmq.MQConfig;
+import com.sunhao.secspike.rabbitmq.MQSender;
+import com.sunhao.secspike.rabbitmq.OrderMessage;
 import com.sunhao.secspike.service.OrderService;
 import com.sunhao.secspike.util.SnowflakeIdWorker;
 import org.slf4j.Logger;
@@ -33,6 +36,9 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderMapper orderMapper;
 
+    @Autowired
+    private MQSender sender;
+
     @Override
     public OrderInfo getOrder(long userId, long goodsId) {
         return orderMapper.getOrder(userId,goodsId);
@@ -48,14 +54,14 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderInfo createOrder(long userId, long goodsId){
-        Goods goods = goodsMapper.getGoodsByGoodsId(goodsId);
+        SpikeGoods goods = goodsMapper.getGoodsByGoodsId(goodsId);
         OrderInfo orderInfo = new OrderInfo();
         try{
             orderInfo.setGoodsId(goodsId);
             orderInfo.setUserId(userId);
             orderInfo.setStatus(0);
             orderInfo.setGoodsName(goods.getGoodsName());
-            orderInfo.setPrice(goods.getGoodsPrice());
+            orderInfo.setPrice(goods.getSpikePrice());
             orderInfo.setCreateTime(new Date());
             //使用雪花算法生成订单号
             String orderId = String.valueOf(idWorker.nextId());
@@ -67,6 +73,10 @@ public class OrderServiceImpl implements OrderService {
             order.setGoodsId(goodsId);
             order.setUserId(userId);
             orderMapper.insertOrder(order);
+
+            OrderMessage orderMessage = new OrderMessage();
+            orderMessage.setOrderId(orderId);
+            sender.sendOrderMessageToDelayQueue(MQConfig.DELAY_EXCHANGE_NAME, "delay.order.routing.key", orderMessage);
         } catch(Exception e){
             log.error("创建订单错误");
             e.printStackTrace();
@@ -77,5 +87,35 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderInfo> getAllOrder(long userId) {
         return orderMapper.getAllOrder(userId);
+    }
+
+    @Override
+    public int getOrderStatus(String orderId) {
+        int status = orderMapper.getOrderStatus(orderId);
+        return status;
+    }
+
+    @Override
+    public Boolean cancelOrder(String orderId) {
+        int res = orderMapper.updateOrderStatusToTwo(orderId);
+        return res > 0;
+    }
+
+    @Override
+    public OrderInfo getOrderDetail(String orderId) {
+        OrderInfo orderInfo = orderMapper.getOrderDetail(orderId);
+        return orderInfo;
+    }
+
+    @Override
+    public String getOrderId(long userId, long goodsId) {
+        String orderId = orderMapper.getOrderId(userId,goodsId);
+        return orderId;
+    }
+
+    @Override
+    public Boolean payForOrder(String orderId) {
+        int res = orderMapper.updateOrderStatusToOne(orderId);
+        return res>0;
     }
 }

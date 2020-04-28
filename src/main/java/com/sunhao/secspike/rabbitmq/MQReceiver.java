@@ -11,6 +11,10 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+
+
+
 /**
  * @author SunYaHao
  * @version 1.0
@@ -34,8 +38,7 @@ public class MQReceiver {
     private SpikeGoodsService spikeGoodsService;
 
     @RabbitListener(queues = MQConfig.LOG_USER_QUEUE_NAME)
-    public void receive(String message){
-        System.out.println(1);
+    public void receive(String message) throws IOException {
         OrderMessage msg = RedisService.stringToBean(message,OrderMessage.class);
         long userId = msg.getUserId();
         long goodsId = msg.getGoodsId();
@@ -55,5 +58,18 @@ public class MQReceiver {
             return ;
         }
         spikeGoodsService.secSpike(userId, goodsId);
+//        channel.basicAck(message1.getMessageProperties().getDeliveryTag(), false);
+    }
+
+    @RabbitListener(queues = MQConfig.DELAY_ORDER_PROCESS_QUEUE_NAME)
+    public void dealDelayQueue(String message) throws IOException{
+        System.out.println("test 1");
+        OrderMessage omsg = RedisService.stringToBean(message,OrderMessage.class);
+        String orderId = omsg.getOrderId();
+        int status = orderService.getOrderStatus(orderId);
+        if(status == 0){
+            orderService.cancelOrder(orderId);
+        }
+//        channel.basicAck(message1.getMessageProperties().getDeliveryTag(), false);
     }
 }

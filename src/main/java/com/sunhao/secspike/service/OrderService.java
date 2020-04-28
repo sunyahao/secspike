@@ -22,4 +22,14 @@ public interface OrderService {
     OrderInfo createOrder(long userId, long goodsId);
 
     List<OrderInfo> getAllOrder(long userId);
+
+    int getOrderStatus(String orderId);
+
+    Boolean cancelOrder(String orderId);
+
+    OrderInfo getOrderDetail(String orderId);
+
+    String getOrderId(long userId,long goodsId);
+
+    Boolean payForOrder(String orderId);
 }

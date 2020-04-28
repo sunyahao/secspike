@@ -112,7 +112,7 @@ public class SpikeController {
         OrderMessage message = new OrderMessage();
         message.setGoodsId(goodsId);
         message.setUserId(Long.valueOf(user.getUsername()));
-        sender.sendOrderMessage(MQConfig.LOG_USER_EXCHANGE_NAME,MQConfig.LOG_USER_ROUTING_KEY,message);
+        sender.sendOrderMessage(MQConfig.LOG_USER_EXCHANGE_NAME,MQConfig.LOG_USER_BINDING_KEY,message);
         return Result.success(CodeMsg.SECSPIKE_WAIT);
     }
 
@@ -168,7 +168,7 @@ public class SpikeController {
         OrderMessage message = new OrderMessage();
         message.setGoodsId(goodsId);
         message.setUserId(Long.valueOf(userId));
-        sender.sendOrderMessage(MQConfig.LOG_USER_EXCHANGE_NAME,MQConfig.LOG_USER_ROUTING_KEY,message);
+        sender.sendOrderMessage(MQConfig.LOG_USER_EXCHANGE_NAME,MQConfig.LOG_USER_BINDING_KEY,message);
         return Result.success(CodeMsg.SECSPIKE_WAIT);
     }
 

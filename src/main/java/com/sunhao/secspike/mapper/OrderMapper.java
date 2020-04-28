@@ -5,6 +5,7 @@ import com.sunhao.secspike.bean.OrderInfo;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -27,4 +28,19 @@ public interface OrderMapper {
 
     @Select("select * from ss_order_info where user_id = #{userId}")
     public List<OrderInfo> getAllOrder(long userId);
+
+    @Select("select status from ss_order_info where order_id = #{orderId}")
+    public int getOrderStatus(String orderId);
+
+    @Update("update ss_order_info set status = 2 where order_id = #{orderId}")
+    public int updateOrderStatusToTwo(String orderId);
+
+    @Update("update ss_order_info set status = 1 where order_id = #{orderId}")
+    public int updateOrderStatusToOne(String orderId);
+
+    @Select("select * from ss_order_info where order_id = #{orderId}")
+    public OrderInfo getOrderDetail(String orderId);
+
+    @Select("select order_id from ss_order where user_id = #{userId} and goods_id = #{goodsId}")
+    public String getOrderId(long userId,long goodsId);
 }

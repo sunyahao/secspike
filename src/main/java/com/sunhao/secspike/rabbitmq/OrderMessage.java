@@ -13,4 +13,5 @@ import lombok.Setter;
 public class OrderMessage {
     private long userId;
     private long goodsId;
+    private String orderId;
 }

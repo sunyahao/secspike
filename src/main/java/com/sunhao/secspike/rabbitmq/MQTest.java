@@ -13,6 +13,6 @@ public class MQTest {
         message.setGoodsId(goodsId);
         message.setUserId(username);
         MQSender sender = new MQSender();
-        sender.sendOrderMessage(MQConfig.LOG_USER_EXCHANGE_NAME,MQConfig.LOG_USER_ROUTING_KEY,message);
+        sender.sendOrderMessage(MQConfig.LOG_USER_EXCHANGE_NAME,MQConfig.LOG_USER_BINDING_KEY,message);
     }
 }

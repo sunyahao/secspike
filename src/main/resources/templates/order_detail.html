@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"/>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/common.css}"/>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/buy.css}"/>
+  <title></title>
+</head>
+
+<body>
+
+<div class="top-1">
+  <img th:src="@{/img/logo.png}" class="img1"/><span>结算页</span>
+  <!--右侧绿色-->
+  <!-- <img src="image/buy/08.png" class="img2"/> -->
+</div>
+<p class="p1"></p>
+<div class="section">
+  <!--收货人信息-->
+  <div class="top-2">
+    <span>收货人信息</span>
+    <span>新增收货地址</span>
+  </div>
+
+  <!--地址-->
+  <div class="top-3">
+    <p>默认地址</p><span th:text="${user.name}"></span><span th:text="${user.place}"></span>
+  </div>
+  <p class="p2">更多地址︾</p>
+  <div class="hh1"></div>
+
+  <h4 class="h4">支付方式</h4>
+  <div class="top-6">
+    <p><span>惠</span>支付宝</p>
+  </div>
+  <div class="hh1"></div>
+
+  <h4 class="h4" style="margin-top: 5px;">订单详情</h4>
+  <div class="top_1">
+    <div class="to_right">
+      <h5>商家：XXX</h5>
+      <div class="yun1">
+        <img src="/img/xiaomi6_small.jpg" class="yun"/>
+        <div class="mi">
+          <p th:text="${order.goodsName}"><span style="color: red;" th:text="${order.price}"></span> </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="xia">
+    <div class="qian">
+      <p class="qian_y">
+        <span>1</span>
+        <span th:text="'件商品，总商品金额：'+${order.price}"></span>
+        <span class="rmb" th:text="${order.price}"></span>
+      </p>
+    </div>
+
+    <div class="yfze">
+      <p class="yfze_a"><span class="z">应付总额：</span><span class="hq" th:text="${order.price}"></span></p>
+      <p class="yfze_b" th:text="'寄送至： '+${user.place}"></p>
+    </div>
+    <button class="tijiao" onclick="pay()">去付款</button>
+
+  </div>
+</div>
+<input type="hidden" th:value="${order.orderId}" id="order">
+</body>
+
+<script>
+
+  $(document).ready(function() {
+    layer.alert("请在30分钟内完成付款，否则订单将会自动取消！")
+  });
+  function pay(){
+    $.ajax({
+      url:"/order/pay",
+      type:"POST",
+      data:{
+        orderId:$('#order').val(),
+      },
+      success:function(data){
+        if(data.code == 0){
+          layer.msg('支付成功')
+          window.location.href="/order/getMyOrder"
+        }else{
+          layer.msg('支付失败')
+        }
+      },
+      error:function(){
+        layer.msg("客户端请求有误");
+      }
+    });
+  }
+</script>
+<script th:src="@{/login/vendor/jquery/jquery-3.2.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/layer/layer.js}"></script>
+</html>

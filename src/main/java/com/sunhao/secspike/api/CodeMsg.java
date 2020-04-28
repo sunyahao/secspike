@@ -41,6 +41,8 @@ public class CodeMsg {
     public static CodeMsg SECSPIKE_WAIT = new CodeMsg(500502, "等待队列处理中");
     public static CodeMsg REQUEST_ILLEGAL = new CodeMsg(500503, "请求非法");
 
+    //支付模块 5006xx
+    public static CodeMsg PAY_FAIL = new CodeMsg(500600, "支付失败");
     @Override
     public String toString(){
         return "CodeMsg：code=" + String.valueOf(code) +";msg="+msg;
